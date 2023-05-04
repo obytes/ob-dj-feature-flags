@@ -2,7 +2,10 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from ob_dj_feature_flags.apis.flags.views import FeatureFlagsViewSet, TestFeatureFlagsViewSet
+from ob_dj_feature_flags.apis.flags.views import (
+    FeatureFlagsViewSet,
+    TestFeatureFlagsViewSet,
+)
 
 app_name = "flags"
 

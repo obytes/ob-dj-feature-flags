@@ -4,10 +4,7 @@ from rest_framework import mixins, permissions, viewsets
 
 from ob_dj_feature_flags.apis.todos.serializers import TodosSerializer
 from ob_dj_feature_flags.core.todos.models import Todo
-from ob_dj_feature_flags.utils.decorators import (
-    action_feature_flag,
-    class_feature_flag,
-)
+from ob_dj_feature_flags.utils.decorators import action_feature_flag, class_feature_flag
 
 logger = logging.getLogger(__name__)
 

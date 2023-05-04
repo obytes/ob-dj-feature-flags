@@ -6,9 +6,7 @@ from ob_dj_feature_flags.utils.model import DjangoModelCleanMixin
 
 
 class FeatureFlag(DjangoModelCleanMixin, models.Model):
-    name = models.CharField(
-        max_length=50, help_text=_("Name of the flag"), unique=True
-    )
+    name = models.CharField(max_length=50, help_text=_("Name of the flag"), unique=True)
     description = models.TextField(
         help_text=_("Description of the flag"), blank=True, null=True
     )
@@ -24,7 +22,6 @@ class FeatureFlag(DjangoModelCleanMixin, models.Model):
         auto_now=True,
         help_text=_("When the flag was last updated"),
     )
-    
 
     objects = FeatureFlagManager()
 
