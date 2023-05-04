@@ -87,6 +87,29 @@ class MyViewSet(viewsets.ModelViewSet):
 This will check if the 'my_feature_flag' is active before allowing access to any actions within the viewset. If the flag is inactive, a JSON response with an error message and status code 404 will be returned.
 
 
+## Skipping Feature Flags During Tests
+
+To skip feature flags during tests, you can use the `@skip_feature_flags` decorator. This decorator can be applied to test functions or test methods to bypass the feature flag checks within the tested views or viewsets.
+
+To use the `skip_feature_flags` decorator, import it from `ob_dj_feature_flags.utils.decorators` and apply it to your test functions or methods. Here's an example:
+
+```python
+from ob_dj_feature_flags.utils.decorators import skip_feature_flags
+import pytest
+
+@skip_feature_flags
+def test_my_view():
+    # Test logic here
+    pass
+```
+
+In this example, the `@skip_feature_flags` decorator is applied to the test function, `test_my_view`. This will skip the feature flag checks within the tested view, allowing the test to proceed without considering the feature flags.
+
+
+## Skipping Feature Flags In The project
+
+If you want to skip feature flags in the entire app, you can add a setting to your Django project's settings module. By setting the `SKIP_FEATURE_FLAGS` setting to `True`, all feature flag checks will be skipped when running the project. Here's how you can do it:
+
 ## Configuration
 
 The package provides a caching mechanism to improve performance when checking feature flag status. By default, it uses Django's caching system. You can configure the cache backend and cache timeout in your Django project settings.
