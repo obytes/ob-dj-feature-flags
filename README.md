@@ -108,7 +108,7 @@ In this example, the `@skip_feature_flags` decorator is applied to the test func
 
 ## Skipping Feature Flags In The project
 
-If you want to skip feature flags in the entire app, you can add a setting to your Django project's settings module. By setting the `SKIP_FEATURE_FLAGS` setting to `True`, all feature flag checks will be skipped when running the project. Here's how you can do it:
+If you want to skip feature flags in the entire app, you can add a setting to your Django project's settings module. By setting the `SKIP_FEATURE_FLAGS` setting to `True`, all feature flag checks will be skipped when running the project.
 
 ## Configuration
 
