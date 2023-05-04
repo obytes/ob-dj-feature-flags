@@ -1,0 +1,70 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  build-n-publish:
+    if: ${{ !github.event.release.prerelease }}
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install pypa/build
+        run: >-
+          python -m
+          pip install
+          build
+          --user
+      - name: Build a binary wheel and a source tarball
+        run: >-
+          python -m
+          build
+          --sdist
+          --wheel
+          --outdir dist/
+          .
+
+      - name: Publish distribution 📦 to PyPI
+        if: startsWith(github.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@v1.4.2
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+#      - name: Slack alert if the publish fails
+#        uses: 8398a7/action-slack@v2
+#        with:
+#          status: ${{ job.status }}
+#          author_name: Publish to PyPI
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_RELEASE_ALERTS_WEBHOOK }}
+#        if: failure()
+
+  slack-notifications:
+    needs: build-n-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Slackify the release body
+        id: release_body
+        uses: LoveToKnow/slackify-markdown-action@v1.0.0
+        with:
+          text: ${{ github.event.release.body }}
+      - uses: homeday-de/slack-release-bot-action@main
+        with:
+          webhook_url: ${{ secrets.SLACK_RELEASE_ALERTS_WEBHOOK }}
+          title: ${{ github.event.release.name }}
+          body: ${{ steps.release_body.outputs.text }}
+          context: https://pypi.org/project/ob-dj-otp/

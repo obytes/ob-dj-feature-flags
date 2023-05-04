@@ -1,0 +1,47 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+dj-database-url = "==0.5.0"
+django = "==3.1.14"
+djangorestframework = "==3.13.1"
+pytz = "==2019.2"
+uWSGI = "==2.0.20"
+argon2-cffi = "==21.1.0"
+djangorestframework-simplejwt = "==4.7.1"
+psycopg2-binary = "==2.9.3"
+django-cors-headers = "==3.10.1"
+future= "==0.18.2"
+drf-yasg = "==1.20.0"
+django-extensions = "==3.1.5"
+pytest-freezegun = "==0.4.2"
+
+[dev-packages]
+mock = "==4.0.3"
+factory-boy = "==3.2.1"
+flake8 = "==3.9.2"
+ipython = "==7.24.1"
+pip-licenses = "==1.15.2"
+pytest = "==6.2.5"
+pytest-cov = "==3.0.0"
+pytest-django = "==4.5.0"
+pytest-env = "==0.6.2"
+pytest-mock = "==3.7.0"
+django-stubs = "==1.7.0"
+djangorestframework-stubs = "==1.4.0"
+dj-inmemorystorage = "==2.1"
+Sphinx = "==4.4.0"
+myst-parser = "==0.15.1"
+twine = "==3.7.1"
+setuptools-scm = "==6.0.1"
+pyenchant = "==3.2.1"
+sphinxcontrib-spelling = "==7.2.1"
+pre-commit = "==2.20.0"
+
+[requires]
+python_version = "3.9"
+
+[pipenv]
+allow_prereleases = true
