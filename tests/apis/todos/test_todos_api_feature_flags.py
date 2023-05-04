@@ -36,8 +36,15 @@ def test_todos_api_feature_flags(api_client):
     assert response.json() == {"error": "Inactive feature"}
 
     # test class decorator
+    todos_create_flag.active = True
+    todos_create_flag.save()
+
+    todos_list_flag.active = True
+    todos_list_flag.save()
+
     todos_flag.active = False
     todos_flag.save()
+    
     response = api_client.get(url)
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == {"error": "Inactive feature"}
