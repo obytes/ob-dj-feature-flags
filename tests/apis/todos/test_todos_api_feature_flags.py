@@ -44,7 +44,7 @@ def test_todos_api_feature_flags(api_client):
 
     todos_flag.active = False
     todos_flag.save()
-    
+
     response = api_client.get(url)
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == {"error": "Inactive feature"}
