@@ -67,4 +67,4 @@ jobs:
           webhook_url: ${{ secrets.SLACK_RELEASE_ALERTS_WEBHOOK }}
           title: ${{ github.event.release.name }}
           body: ${{ steps.release_body.outputs.text }}
-          context: https://pypi.org/project/ob-dj-otp/
+          context: https://pypi.org/project/ob-dj-feature-flags/
