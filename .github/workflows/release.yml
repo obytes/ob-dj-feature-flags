@@ -51,20 +51,20 @@ jobs:
 #          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_RELEASE_ALERTS_WEBHOOK }}
 #        if: failure()
 
-#  slack-notifications:
-#    needs: build-n-publish
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#      - name: Slackify the release body
-#        id: release_body
-#        uses: LoveToKnow/slackify-markdown-action@v1.0.0
-#        with:
-#          text: ${{ github.event.release.body }}
-#      - uses: homeday-de/slack-release-bot-action@main
-#        with:
-#          webhook_url: ${{ secrets.SLACK_RELEASE_ALERTS_WEBHOOK }}
-#          title: ${{ github.event.release.name }}
-#          body: ${{ steps.release_body.outputs.text }}
-#          context: https://pypi.org/project/ob-dj-feature-flags/
+  slack-notifications:
+    needs: build-n-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Slackify the release body
+        id: release_body
+        uses: LoveToKnow/slackify-markdown-action@v1.0.0
+        with:
+          text: ${{ github.event.release.body }}
+      - uses: homeday-de/slack-release-bot-action@main
+        with:
+          webhook_url: ${{ secrets.SLACK_RELEASE_ALERTS_WEBHOOK }}
+          title: ${{ github.event.release.name }}
+          body: ${{ steps.release_body.outputs.text }}
+          context: https://pypi.org/project/ob-dj-feature-flags/
