@@ -86,6 +86,14 @@ class MyViewSet(viewsets.ModelViewSet):
 
 This will check if the 'my_feature_flag' is active before allowing access to any actions within the viewset. If the flag is inactive, a JSON response with an error message and status code 404 will be returned.
 
+### Use in Your Client Apps
+
+Integrating feature flags into your client apps allows you to control the behavior and enable/disable specific features dynamically. To leverage feature flags in your client app, follow these simple steps:
+
+1. At the startup time of your client app make a GET request to the feature flags endpoint of your backend API (`/flags/` by default).
+2. The endpoint will provide a JSON response containing the list of feature flags along with their statuses.
+3. Store the feature flags and their statuses in your client app.
+4. Use the feature flags to control the behavior of your client app (you can create a wrapper function or a custom hook to simplify this process).
 
 ## Skipping Feature Flags During Tests
 

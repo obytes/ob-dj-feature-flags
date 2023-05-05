@@ -8,7 +8,7 @@ from ob_dj_feature_flags.core.flags.models import FeatureFlag
 logger = logging.getLogger(__name__)
 
 
-class FeatureFlagsViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class FeatureFlagsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = [
         permissions.AllowAny,
     ]

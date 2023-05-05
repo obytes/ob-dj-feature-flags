@@ -19,7 +19,7 @@ def get_flags_cache(cache_key="feature_flags_cache"):
     return flags_cache
 
 
-def action_feature_flag(*feature_flags):
+def action_feature_flag(feature_flag):
     def decorator(view_func):
         @wraps(view_func)
         def wrapper(self, request, *args, **kwargs):
@@ -27,19 +27,13 @@ def action_feature_flag(*feature_flags):
                 return view_func(self, request, *args, **kwargs)
 
             flags_cache = get_flags_cache()
-            for flag in feature_flags:
-                if flag not in flags_cache:
-                    return HttpResponse(
-                        content='{"error": "Invalid feature flag"}',
-                        content_type="application/json",
-                        status=404,
-                    )
-                if not flags_cache[flag]:
-                    return HttpResponse(
-                        content='{"error": "Inactive feature"}',
-                        content_type="application/json",
-                        status=404,
-                    )
+            flag_active = flags_cache.get(feature_flag, False)
+            if not flag_active:
+                return HttpResponse(
+                    content='{"error": "Inactive feature"}',
+                    content_type="application/json",
+                    status=404,
+                )
 
             return view_func(self, request, *args, **kwargs)
 
@@ -48,7 +42,7 @@ def action_feature_flag(*feature_flags):
     return decorator
 
 
-def class_feature_flag(*feature_flags):
+def class_feature_flag(feature_flag):
     def decorator(view_class):
         class DecoratedClass(view_class):
             def dispatch(self, request, *args, **kwargs):
@@ -56,19 +50,13 @@ def class_feature_flag(*feature_flags):
                     return super().dispatch(request, *args, **kwargs)
 
                 flags_cache = get_flags_cache()
-                for flag in feature_flags:
-                    if flag not in flags_cache:
-                        return HttpResponse(
-                            content='{"error": "Invalid feature flag"}',
-                            content_type="application/json",
-                            status=404,
-                        )
-                    if not flags_cache[flag]:
-                        return HttpResponse(
-                            content='{"error": "Inactive feature"}',
-                            content_type="application/json",
-                            status=404,
-                        )
+                flag_active = flags_cache.get(feature_flag, False)
+                if not flag_active:
+                    return HttpResponse(
+                        content='{"error": "Inactive feature"}',
+                        content_type="application/json",
+                        status=404,
+                    )
                 return super().dispatch(request, *args, **kwargs)
 
         return DecoratedClass
