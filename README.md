@@ -1,60 +1,52 @@
 # ob-dj-feature-flags
 
-ob-dj-feature-flags is a Django package for managing feature flags and controlling access to Django views & API endpoints using decorators.
+Feature flags are a powerful technique that allows you to enable/disable specific features in your application without deploying new code. This gives you the ability to control the behavior of your application dynamically and perform A/B testing, read more about feature flags [here](https://www.atlassian.com/continuous-delivery/principles/feature-flags).
+
+ob-dj-feature-flags provides a simple way to create and manage feature flags within your Django admin panel. It also provides decorators for views and viewsets to easily control access based on feature flags.
 
 ## Features
 
 - Create and manage feature flags within your Django admin panel.
-- Decorators for views and viewsets to easily control access based on feature flags.
-- Caching mechanism to improve performance when checking feature flag status.
-- Management command to scan viewsets and actions to populate the feature flags automatically (coming soon).
+- Add decorators to views and viewsets to control access based on the created feature flags.
+- Caching mechanism to reduce database hits when checking feature flag statuses.
+- Feature flags endpoint to use the same feature flags in your client apps.
+- Skip feature flags during tests or in the entire project.
 
-### Overview
+## Setup & Installation
 
-```python
-from ob_dj_feature_flags.utils.decorators import class_feature_flag, action_feature_flag
-
-@class_feature_flag("todos")
-class TodosViewSet(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    viewsets.GenericViewSet,
-):
-    permission_classes = [
-        permissions.AllowAny,
-    ]
-    queryset = Todo.objects.all()
-    serializer_class = TodosSerializer
-
-    @action_feature_flag("todos_list")
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
-    @action_feature_flag("todos_create")
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
-```
-
-In this example, the TodosViewSet class is decorated with `@class_feature_flag("todos")`, which checks if the 'todos' feature flag is active before allowing access to any actions within the viewset.
-
-Additionally, the list() method is decorated with `@action_feature_flag("todos_list")`, which checks if the 'todos_list' feature flag is active before allowing access to the list action. Similarly, the create() method is decorated with `@action_feature_flag("todos_create")`, which checks if the 'todos_create' feature flag is active before allowing access to the create action.
-
-By combining both class-level and action-level feature flags, you can control access to the entire viewset based on the 'todos' flag, as well as control access to specific actions within the viewset based on the corresponding flags ('todos_list' and 'todos_create' in this example).
-
-## Installation
-
-Use pip to install ob-dj-feature-flags:
+1. Use pip to install ob-dj-feature-flags:
 
 ```shell
 pip install ob-dj-feature-flags
 ```
+
+2. Add "ob_dj_feature_flags" to your `INSTALLED_APPS` setting like this:
+
+```python
+   # settings.py
+   INSTALLED_APPS = [
+        ...
+        "ob_dj_feature_flags.core.flags",
+   ]
+```
+
+3. If you plan to use the created feature flags in your client apps, add the feature flags endpoint to your project's urls.py:
+
+```python
+   # urls.py
+   urlpatterns = [
+        ...
+        path('ob-dj-feature-flags/', include('ob_dj_feature_flags.apis.flags.urls')),
+   ]
+```
+
+4. Run `python manage.py migrate` to create the feature flags table.
 
 ## Usage
 
 ### Creating Feature Flags
 
 Define feature flags in your Django project using the provided FeatureFlag admin. Each feature flag has a unique name and an active status.
-
 
 ### Decorating Views
 
@@ -90,9 +82,9 @@ This will check if the 'my_feature_flag' is active before allowing access to any
 
 Integrating feature flags into your client apps allows you to control the behavior and enable/disable specific features dynamically. To leverage feature flags in your client app, follow these simple steps:
 
-1. At the startup time of your client app make a GET request to the feature flags endpoint of your backend API (`/flags/` by default).
+1. Make a GET request to the feature flags endpoint of your backend API (preferably at startup) `ob-dj-feature-flags/` (check step 3 of Setup & Installation section).
 2. The endpoint will provide a JSON response containing the list of feature flags along with their statuses.
-3. Store the feature flags and their statuses in your client app.
+3. Store the feature flags and their statuses somewhere in your client app.
 4. Use the feature flags to control the behavior of your client app (you can create a wrapper function or a custom hook to simplify this process).
 
 ## Skipping Feature Flags During Tests
