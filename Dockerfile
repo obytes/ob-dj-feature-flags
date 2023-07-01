@@ -1,4 +1,4 @@
-FROM python:3.9.7-slim-buster
+FROM python:3.11.4-slim-buster
 
 # prevent __pycache__ folder and files
 ENV PYTHONDONTWRITEBYTECODE 1
